@@ -60,11 +60,11 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ onClose, onSu
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">Rs</span>
             <input 
               type="number" 
               placeholder="0.00"
-              className="w-full bg-slate-50 border-0 rounded-2xl py-4 pl-8 pr-4 text-2xl font-bold focus:ring-2 focus:ring-emerald-500 outline-none"
+              className="w-full bg-slate-50 border-0 rounded-2xl py-4 pl-12 pr-4 text-2xl font-bold focus:ring-2 focus:ring-emerald-500 outline-none"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               autoFocus

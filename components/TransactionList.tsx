@@ -36,7 +36,6 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
         <div key={date} className="space-y-3">
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest px-2">{date}</p>
           <div className="space-y-2">
-            {/* Cast items to Transaction[] because Object.entries values may be inferred as unknown in strict mode */}
             {(items as Transaction[]).map((t) => {
               const style = CATEGORY_STYLES[t.category] || CATEGORY_STYLES['Others'];
               return (
@@ -55,7 +54,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
                   </div>
                   <div className="flex flex-col items-end">
                     <p className={`font-bold text-sm ${t.type === 'income' ? 'text-emerald-600' : 'text-rose-500'}`}>
-                      {t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()}
+                      {t.type === 'income' ? '+' : '-'}Rs {t.amount.toLocaleString()}
                     </p>
                     <button 
                       onClick={() => onDelete(t.id)}

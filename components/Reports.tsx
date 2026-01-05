@@ -20,7 +20,6 @@ const Reports: React.FC<ReportsProps> = ({ transactions }) => {
       const d = new Date(t.date);
       unique.add(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
     });
-    // Add current month if not exists
     const d = new Date();
     unique.add(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
     return Array.from(unique).sort().reverse();
@@ -86,6 +85,7 @@ const Reports: React.FC<ReportsProps> = ({ transactions }) => {
               <Tooltip 
                 cursor={{ fill: 'transparent' }}
                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                formatter={(value: number) => `Rs ${value.toLocaleString()}`}
               />
               <Bar dataKey="amount" radius={[8, 8, 0, 0]} barSize={40}>
                 {monthData.barData.map((entry, index) => (
@@ -118,12 +118,13 @@ const Reports: React.FC<ReportsProps> = ({ transactions }) => {
                 </Pie>
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                  formatter={(value: number) => `Rs ${value.toLocaleString()}`}
                 />
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
               <span className="text-[10px] uppercase font-bold text-slate-400">Total</span>
-              <span className="text-lg font-bold text-slate-800">${monthData.totals.expense.toLocaleString()}</span>
+              <span className="text-lg font-bold text-slate-800">Rs {monthData.totals.expense.toLocaleString()}</span>
             </div>
           </div>
         ) : (
@@ -176,7 +177,7 @@ const BreakdownRow: React.FC<BreakdownRowProps> = ({ category, amount, type }) =
         <span className="font-semibold text-slate-700 text-sm">{category}</span>
       </div>
       <span className={`font-bold text-sm ${type === 'income' ? 'text-emerald-600' : 'text-slate-800'}`}>
-        ${amount.toLocaleString()}
+        Rs {amount.toLocaleString()}
       </span>
     </div>
   );

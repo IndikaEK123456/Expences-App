@@ -13,7 +13,7 @@ const SummaryDashboard: React.FC<SummaryDashboardProps> = ({ income, expense }) 
     <div className="relative overflow-hidden bg-emerald-600 rounded-3xl p-6 text-white shadow-xl">
       <div className="relative z-10">
         <p className="text-emerald-100 text-sm font-medium mb-1">Total Balance</p>
-        <h3 className="text-3xl font-bold mb-6">${balance.toLocaleString()}</h3>
+        <h3 className="text-3xl font-bold mb-6">Rs {balance.toLocaleString()}</h3>
         
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-3 flex items-center space-x-3">
@@ -22,7 +22,7 @@ const SummaryDashboard: React.FC<SummaryDashboardProps> = ({ income, expense }) 
             </div>
             <div>
               <p className="text-emerald-200 text-[10px] uppercase font-bold tracking-tight">Income</p>
-              <p className="text-sm font-semibold">${income.toLocaleString()}</p>
+              <p className="text-sm font-semibold">Rs {income.toLocaleString()}</p>
             </div>
           </div>
           
@@ -32,7 +32,7 @@ const SummaryDashboard: React.FC<SummaryDashboardProps> = ({ income, expense }) 
             </div>
             <div>
               <p className="text-emerald-200 text-[10px] uppercase font-bold tracking-tight">Expense</p>
-              <p className="text-sm font-semibold">${expense.toLocaleString()}</p>
+              <p className="text-sm font-semibold">Rs {expense.toLocaleString()}</p>
             </div>
           </div>
         </div>

@@ -44,13 +44,18 @@ const INITIAL_DATA: Transaction[] = [
 
 const App: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    const saved = localStorage.getItem('spendwise_transactions');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return parsed.length > 0 ? parsed : INITIAL_DATA;
+    try {
+      const saved = localStorage.getItem('spendwise_transactions');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.error("Failed to parse transactions from local storage", e);
     }
     return INITIAL_DATA;
   });
+  
   const [activeTab, setActiveTab] = useState<'home' | 'reports'>('home');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -88,7 +93,7 @@ const App: React.FC = () => {
   }, [currentMonthTransactions]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 pb-20 max-w-md mx-auto shadow-2xl overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 pb-20 max-w-md mx-auto shadow-2xl relative">
       <Header />
       
       <main className="flex-1 overflow-y-auto px-4 pt-4 space-y-6">
