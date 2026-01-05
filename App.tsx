@@ -7,10 +7,49 @@ import AddTransactionModal from './components/AddTransactionModal';
 import SummaryDashboard from './components/SummaryDashboard';
 import Reports from './components/Reports';
 
+const INITIAL_DATA: Transaction[] = [
+  { 
+    id: 'sample-1', 
+    type: 'income', 
+    category: IncomeCategory.Salary, 
+    amount: 5000, 
+    date: new Date().toISOString(), 
+    note: 'Monthly Salary' 
+  },
+  { 
+    id: 'sample-2', 
+    type: 'expense', 
+    category: ExpenseCategory.Foods, 
+    amount: 150.50, 
+    date: new Date().toISOString(), 
+    note: 'Weekly Groceries' 
+  },
+  { 
+    id: 'sample-3', 
+    type: 'expense', 
+    category: ExpenseCategory.DogExpenses, 
+    amount: 85, 
+    date: new Date().toISOString(), 
+    note: 'Pet grooming and treats' 
+  },
+  { 
+    id: 'sample-4', 
+    type: 'expense', 
+    category: ExpenseCategory.Travelling, 
+    amount: 45.20, 
+    date: new Date().toISOString(), 
+    note: 'Gas refill' 
+  }
+];
+
 const App: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
     const saved = localStorage.getItem('spendwise_transactions');
-    return saved ? JSON.parse(saved) : [];
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.length > 0 ? parsed : INITIAL_DATA;
+    }
+    return INITIAL_DATA;
   });
   const [activeTab, setActiveTab] = useState<'home' | 'reports'>('home');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +88,7 @@ const App: React.FC = () => {
   }, [currentMonthTransactions]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 pb-20 max-w-md mx-auto shadow-2xl overflow-hidden min-h-screen">
+    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 pb-20 max-w-md mx-auto shadow-2xl overflow-hidden">
       <Header />
       
       <main className="flex-1 overflow-y-auto px-4 pt-4 space-y-6">
@@ -60,12 +99,17 @@ const App: React.FC = () => {
               expense={totals.expense} 
             />
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold text-slate-800">Recent Activity</h2>
-                <button className="text-sm font-medium text-emerald-600">See All</button>
+              <div className="flex justify-between items-center px-1">
+                <h2 className="text-xl font-bold text-slate-800 tracking-tight">Recent Activity</h2>
+                <button 
+                  onClick={() => setActiveTab('reports')}
+                  className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 active:scale-95 transition-all"
+                >
+                  View Reports
+                </button>
               </div>
               <TransactionList 
-                transactions={transactions.slice(0, 20)} 
+                transactions={transactions} 
                 onDelete={deleteTransaction} 
               />
             </div>
@@ -78,27 +122,28 @@ const App: React.FC = () => {
       {/* Floating Action Button */}
       <button 
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-600 text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-emerald-700 transition-transform active:scale-95 z-40"
+        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-600 text-white rounded-full shadow-lg shadow-emerald-200 flex items-center justify-center text-2xl hover:bg-emerald-700 transition-all active:scale-90 z-40"
+        aria-label="Add transaction"
       >
         <i className="fa-solid fa-plus"></i>
       </button>
 
       {/* Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 safe-area-bottom z-50 max-w-md mx-auto">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-slate-100 safe-area-bottom z-50 max-w-md mx-auto">
         <div className="flex justify-around items-center h-16">
           <button 
             onClick={() => setActiveTab('home')}
-            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'home' ? 'text-emerald-600' : 'text-slate-400'}`}
+            className={`flex flex-col items-center justify-center w-full h-full transition-all ${activeTab === 'home' ? 'text-emerald-600' : 'text-slate-400'}`}
           >
             <i className={`fa-solid fa-house text-lg ${activeTab === 'home' ? 'mb-1' : ''}`}></i>
-            <span className="text-[10px] font-medium">Home</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Dashboard</span>
           </button>
           <button 
             onClick={() => setActiveTab('reports')}
-            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${activeTab === 'reports' ? 'text-emerald-600' : 'text-slate-400'}`}
+            className={`flex flex-col items-center justify-center w-full h-full transition-all ${activeTab === 'reports' ? 'text-emerald-600' : 'text-slate-400'}`}
           >
             <i className={`fa-solid fa-chart-pie text-lg ${activeTab === 'reports' ? 'mb-1' : ''}`}></i>
-            <span className="text-[10px] font-medium">Reports</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Analytics</span>
           </button>
         </div>
       </nav>
