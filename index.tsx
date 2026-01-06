@@ -1,29 +1,31 @@
 
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
-const mountApp = () => {
-  const rootElement = document.getElementById('root');
-  if (!rootElement) {
-    console.error("Could not find root element to mount to");
-    return;
-  }
+const container = document.getElementById('root');
 
+if (container) {
   try {
-    const root = ReactDOM.createRoot(rootElement);
+    const root = createRoot(container);
     root.render(
       <React.StrictMode>
         <App />
       </React.StrictMode>
     );
   } catch (error) {
-    console.error("React mounting failed:", error);
+    console.error("Critical error during React initialization:", error);
+    container.innerHTML = `<div style="padding: 20px; color: #ef4444; font-family: sans-serif;">
+      <h2>Application Error</h2>
+      <p>Failed to start the application. Please refresh the page.</p>
+    </div>`;
   }
-};
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mountApp);
 } else {
-  mountApp();
+  console.error("Root element not found");
 }
+
+// Global error handler for uncaught exceptions
+window.onerror = function(message, source, lineno, colno, error) {
+  console.error("Uncaught error:", { message, source, lineno, colno, error });
+  return false;
+};
