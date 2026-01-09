@@ -2,10 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
-const startApp = () => {
-  const container = document.getElementById('root');
-  if (!container) return;
+console.log("Starting SpendWise Pro...");
 
+const container = document.getElementById('root');
+
+if (container) {
   try {
     const root = createRoot(container);
     root.render(
@@ -13,25 +14,26 @@ const startApp = () => {
         <App />
       </React.StrictMode>
     );
+    console.log("React application mounted successfully.");
   } catch (error) {
-    console.error("React Mounting Error:", error);
+    console.error("Critical error during React initialization:", error);
     container.innerHTML = `
-      <div style="padding: 40px; text-align: center; font-family: sans-serif;">
-        <h2 style="color: #ef4444;">Initialization Error</h2>
-        <p style="color: #64748b;">The app failed to load. Please try refreshing.</p>
+      <div style="padding: 40px; text-align: center; font-family: sans-serif; color: #334155;">
+        <h2 style="color: #ef4444;">App failed to load</h2>
+        <p>Please check your internet connection and refresh the page.</p>
+        <button onclick="window.location.reload()" style="margin-top: 16px; padding: 10px 20px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: bold;">Refresh</button>
       </div>
     `;
   }
-};
-
-// Handle potential race conditions with DOM loading
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  startApp();
 } else {
-  document.addEventListener('DOMContentLoaded', startApp);
+  console.error("The #root element was not found in the DOM.");
 }
 
-// Global catch-all for module errors
-window.addEventListener('error', (e) => {
-  console.error("Global script error:", e.message);
+// Global error tracking for deployment debugging
+window.addEventListener('error', (event) => {
+  console.error("Runtime error caught:", event.error || event.message);
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error("Unhandled promise rejection:", event.reason);
 });
