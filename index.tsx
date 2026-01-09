@@ -1,11 +1,11 @@
-
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
-const container = document.getElementById('root');
+const startApp = () => {
+  const container = document.getElementById('root');
+  if (!container) return;
 
-if (container) {
   try {
     const root = createRoot(container);
     root.render(
@@ -14,18 +14,24 @@ if (container) {
       </React.StrictMode>
     );
   } catch (error) {
-    console.error("Critical error during React initialization:", error);
-    container.innerHTML = `<div style="padding: 20px; color: #ef4444; font-family: sans-serif;">
-      <h2>Application Error</h2>
-      <p>Failed to start the application. Please refresh the page.</p>
-    </div>`;
+    console.error("React Mounting Error:", error);
+    container.innerHTML = `
+      <div style="padding: 40px; text-align: center; font-family: sans-serif;">
+        <h2 style="color: #ef4444;">Initialization Error</h2>
+        <p style="color: #64748b;">The app failed to load. Please try refreshing.</p>
+      </div>
+    `;
   }
+};
+
+// Handle potential race conditions with DOM loading
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  startApp();
 } else {
-  console.error("Root element not found");
+  document.addEventListener('DOMContentLoaded', startApp);
 }
 
-// Global error handler for uncaught exceptions
-window.onerror = function(message, source, lineno, colno, error) {
-  console.error("Uncaught error:", { message, source, lineno, colno, error });
-  return false;
-};
+// Global catch-all for module errors
+window.addEventListener('error', (e) => {
+  console.error("Global script error:", e.message);
+});

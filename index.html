@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +28,7 @@
     .animate-slide-up {
       animation: slide-up 0.3s ease-out forwards;
     }
-    /* Loading indicator that shows when React hasn't mounted yet */
+    /* This loader shows only while the root is empty (before React mounts) */
     #root:empty::before {
       content: "";
       position: fixed;
@@ -38,10 +37,11 @@
       width: 40px;
       height: 40px;
       margin: -20px 0 0 -20px;
-      border: 3px solid #f3f3f3;
+      border: 3px solid #e2e8f0;
       border-top: 3px solid #10b981;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      z-index: 1000;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -54,7 +54,7 @@
     "react": "https://esm.sh/react@19.0.0",
     "react-dom": "https://esm.sh/react-dom@19.0.0",
     "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "recharts": "https://esm.sh/recharts@2.15.0",
+    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }
